@@ -104,9 +104,11 @@ if __name__ == "__main__":
         user_text_responses = ((r.recognize_google(stt_data)).upper()).split()
     # Loop through correct answers, see if the user was correct or not
     correctness_results = np.empty(NUM_TESTS, dtype=bool)
+    num_correct_responses = 0
     for i in range(NUM_TESTS):
         if user_text_responses[i][0] == answer_array[i][0][0]:
             correctness_results[i] = True
+            num_correct_responses += 1
         else:
             correctness_results[i] = False
     print("Done.")
@@ -158,6 +160,10 @@ if __name__ == "__main__":
         else:
             response_timing_markers = np.delete(response_timing_markers, j)
         reaction_times.append(rt)
+
+    # Notify user of their performance
+    print("You got " + str(num_correct_responses) + " / " + str(NUM_TESTS) +
+          " correct answers (" + str(100*float(num_correct_responses)/NUM_TESTS) + " %).")
 
     # Write results to file
     with open(TRIAL_NAME + ".csv", 'w') as reac_file:
