@@ -16,7 +16,7 @@ TEST_QUESTION_FILENAME = "clock_versionA.mat"
 # Pause time in seconds
 PAUSE_TIME_S = 1.6
 # Number of tests
-NUM_TESTS = 10
+NUM_TESTS = 90
 # The highest audio level (in dB) the program will determine to be considered "silence"
 SILENCE_THRESHOLD_DB = -20.0
 # The minimum period, in milliseconds, that could distinguish two different responses
