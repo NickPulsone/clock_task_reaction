@@ -7,6 +7,8 @@ import pyaudio
 import sounddevice as sd
 import datetime
 import csv
+import soundfile
+import speech_recognition as sr
 
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  TUNABLE PARAMETERS    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 # Trial name (subject name, etc)
@@ -16,7 +18,7 @@ TEST_QUESTION_FILENAME = "clock_versionA.mat"
 # Pause time in seconds
 PAUSE_TIME_S = 1.6
 # Number of tests
-NUM_TESTS = 90
+NUM_TESTS = 5
 # The highest audio level (in dB) the program will determine to be considered "silence"
 SILENCE_THRESHOLD_DB = -20.0
 # The minimum period, in milliseconds, that could distinguish two different responses
@@ -51,7 +53,7 @@ if __name__ == "__main__":
     for num in ["3..", "2..", "1.."]:
         print(num)
         sleep(1)
-    print("Starting...")
+    print("Starting the recording...")
 
     # Define recording parameters and start recording
     rec_seconds = int(NUM_TESTS) * 3.5 + 5
@@ -86,10 +88,27 @@ if __name__ == "__main__":
     stream.close()
     p.terminate()
 
-    # Stop the recording, save file as .wav
+    # Stop the main recording, save file as .wav
     print("Waiting for recording to stop...")
     sd.wait()
     wavfile.write(TRIAL_NAME + '.wav', rec_sample_rate, myrecording)
+    print("Recording stopped. Converting speech to text...")
+    # Convert wav file for speech recognition
+    data, samplerate = soundfile.read(TRIAL_NAME + '.wav')
+    soundfile.write(TRIAL_NAME + 'stt.wav', data, samplerate, subtype='PCM_16')
+    # Start the speech to text recording
+    r = sr.Recognizer()
+    with sr.AudioFile(TRIAL_NAME + 'stt.wav') as source:
+        r.adjust_for_ambient_noise(source)
+        stt_data = r.record(source)
+        user_text_responses = ((r.recognize_google(stt_data)).upper()).split()
+    # Loop through correct answers, see if the user was correct or not
+    correctness_results = np.empty(NUM_TESTS, dtype=bool)
+    for i in range(NUM_TESTS):
+        if user_text_responses[i][0] == answer_array[i][0][0]:
+            correctness_results[i] = True
+        else:
+            correctness_results[i] = False
     print("Done.")
     print("Calculating reaction times...")
 
@@ -143,8 +162,8 @@ if __name__ == "__main__":
     # Write results to file
     with open(TRIAL_NAME + ".csv", 'w') as reac_file:
         writer = csv.writer(reac_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(['Hour', 'Minute', 'Correct answer', 'Reaction time (s)'])
+        writer.writerow(['Hour', 'Minute', 'User response', 'Correct answer', 'Correct (T/F)',  'Reaction time (s)'])
         for i in range(NUM_TESTS):
-            writer.writerow([hour_array[i], minute_array[i], answer_array[i][0],
-                             reaction_times[i]])
+            writer.writerow([hour_array[i], minute_array[i], user_text_responses[i], answer_array[i][0],
+                             correctness_results[i], reaction_times[i]])
     print("Done")
