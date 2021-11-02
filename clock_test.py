@@ -161,6 +161,14 @@ if __name__ == "__main__":
             response_timing_markers = np.delete(response_timing_markers, j)
         reaction_times.append(rt)
 
+    # Create another array to label each reactiontime according to if it was within the alloted time or not
+    reaction_on_time = np.empty(NUM_TESTS, dtype=bool)
+    for i in range(NUM_TESTS):
+        if reaction_times[i] > DELAY:
+            reaction_on_time[i] = False
+        else:
+            reaction_on_time[i] = True
+        
     # Notify user of their performance
     print("You got " + str(num_correct_responses) + " / " + str(NUM_TESTS) +
           " correct answers (" + str(100*float(num_correct_responses)/NUM_TESTS) + " %).")
@@ -168,8 +176,8 @@ if __name__ == "__main__":
     # Write results to file
     with open(TRIAL_NAME + ".csv", 'w') as reac_file:
         writer = csv.writer(reac_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(['Hour', 'Minute', 'User response', 'Correct answer', 'Correct (T/F)',  'Reaction time (s)'])
+        writer.writerow(['Hour', 'Minute', 'User response', 'Correct answer', 'Correct (T/F)',  'Reaction time (s)', 'Reaction on time(T/F)'])
         for i in range(NUM_TESTS):
             writer.writerow([hour_array[i], minute_array[i], user_text_responses[i], answer_array[i][0],
-                             correctness_results[i], reaction_times[i]])
+                             correctness_results[i], reaction_times[i], reaction_on_time[i]])
     print("Done")
