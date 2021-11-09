@@ -156,6 +156,7 @@ if __name__ == "__main__":
 
     # Calculate the reponse times given the arrays for response_timing_markers and stimuli_time_stamps
     reaction_times = []
+    clip_index_array = np.empty(NUM_TESTS, dtype=int)
     num_correct_responses = 0
     for i in range(NUM_TESTS):
         # If there is no response after a time stamp, clearly the user failed to respond...
@@ -182,6 +183,8 @@ if __name__ == "__main__":
                 response_accuracies.append("N/A")
                 continue
             else:
+                # Save index to clip index array
+                clip_index_array[i] = j
                 # If the response was valid, detemine if it was correct using speech recognition
                 with sr.AudioFile(os.path.join(clip_seperation_path, f"chunk{j}.wav")) as source:
                     # listen for the data (load audio to memory)
@@ -219,9 +222,9 @@ if __name__ == "__main__":
     # Write results to file
     with open(TRIAL_NAME + ".csv", 'w') as reac_file:
         writer = csv.writer(reac_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(['Hour', 'Minute', 'Correct answer', 'User Response', 'Accuracy (T/F)', 'Reaction time (s)', 'Reaction on time (T/F)'])
+        writer.writerow(['Hour', 'Minute', 'Correct answer', 'User Response', 'Accuracy (T/F)', 'Reaction time (s)', 'Reaction on time (T/F)', 'Clip Index'])
         for i in range(NUM_TESTS):
             writer.writerow([hour_array[i], minute_array[i], answer_array[i][0],
                              raw_responses[i], response_accuracies[i], reaction_times[i],
-                             reaction_on_time[i]])
+                             reaction_on_time[i], clip_index_array[i]])
     print("Done")
