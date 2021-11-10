@@ -177,7 +177,7 @@ if __name__ == "__main__":
             # If there is no nonsilent chunk after the time that the stimulus is displayed, store reaction time as "nan"
             # Also if the user's response is over 1.6s after the stimulus is displayed, then we know they either failed to
             # respond or the audio was not recorded and intepreted properly.
-            if j >= len(response_timing_markers):
+            if j >= len(response_timing_markers) or (rt > AFTER_MIN_DELAY * 1.2):
                 reaction_times.append(float('nan'))
                 raw_responses.append("N/A")
                 response_accuracies.append("N/A")
