@@ -16,7 +16,7 @@ TEST_QUESTION_FILENAME = "clock_versionA.mat"
 PAUSE_TIME_S = 1.6
 # Number of tests
 # NUM_TESTS = 90
-NUM_TESTS = 15
+NUM_TESTS = 10
 # Delay after the minute (not exact due to inconsistent timing when playing sound in python)
 AFTER_HOUR_DELAY = 0.1
 AFTER_MIN_DELAY = 0.9
