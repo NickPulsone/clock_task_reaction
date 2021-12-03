@@ -15,7 +15,7 @@ CSV_FILENAME = TRIAL_NAME + ".csv"
 PAUSE_TIME_S = 1.6
 # Number of tests
 # NUM_TESTS = 90
-NUM_TESTS = 15
+NUM_TESTS = 10
 # The highest audio level (in dB) the program will determine to be considered "silence"
 SILENCE_THRESHOLD_DB = -20.0
 # The minimum period, in milliseconds, that could distinguish two different responses
@@ -167,10 +167,15 @@ if __name__ == "__main__":
     # Write results to file
     with open(TRIAL_NAME + "_RESULTS.csv", 'w') as reac_file:
         writer = csv.writer(reac_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
-        writer.writerow(['Hour', 'Minute', 'Correct answer', 'User Response', 'Accuracy (T/F)', 'Reaction time (s)',
-                         'Reaction on time (T/F)', 'Clip Index'])
+        writer.writerow(['Hour', 'Minute', 'Correct answer', 'User Response',
+                         'Accuracy (T/F)', 'Reaction time (s)', 'Reaction on time (T/F)', 'Clip Index', ' ', ' ', 'Responses time from start'])
         for i in range(NUM_TESTS):
-            writer.writerow([hour_array[i], minute_array[i], correct_answers[i],
-                             raw_responses[i], response_accuracies[i], reaction_times[i],
-                             reaction_on_time[i], clip_index_array[i]])
+            if i >= len(response_timing_markers):
+                writer.writerow([hour_array[i], minute_array[i], correct_answers[i],
+                                 raw_responses[i], response_accuracies[i], reaction_times[i],
+                                 reaction_on_time[i], clip_index_array[i], ' ', ' ', -1])
+            else:
+                writer.writerow([hour_array[i], minute_array[i], correct_answers[i],
+                                 raw_responses[i], response_accuracies[i], reaction_times[i],
+                                 reaction_on_time[i], clip_index_array[i], ' ', ' ', response_timing_markers[i]])
     print("Done")
