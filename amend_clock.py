@@ -51,6 +51,16 @@ reaction_times = np.array(data[:, 5], dtype=float)
 reaction_on_time = np.array(data[:, 6], dtype=str)
 clip_index_array = np.array(data[:, 7], dtype=int)
 response_timing_markers = np.array(data[:, 10], dtype=float)
+
+# Reformat stored data
+hour_array = hour_array[hour_array != -1]
+minute_array = minute_array[minute_array != -1]
+correct_answers = correct_answers[correct_answers != '-1']
+user_responses = user_responses[user_responses != '-1']
+accuracy_array = accuracy_array[accuracy_array != '-1']
+reaction_times = reaction_times[reaction_times != -1]
+reaction_on_time = reaction_on_time[reaction_on_time != '-1']
+clip_index_array = clip_index_array[clip_index_array != -1]
 response_timing_markers = response_timing_markers[response_timing_markers != -1.0]
 NUM_TESTS = correct_answers.size
 
@@ -73,7 +83,7 @@ r = sr.Recognizer()
 for i in iteration_indices:
     # If there is no response after a time stamp, clearly the user failed to respond...
     rt = float('nan')
-    clip_index_array[i] = -1
+    clip_index_array[i] = -9999
     if stimuli_time_stamps[i] > response_timing_markers[-1]:
         accuracy_array[i] = "N/A"
         user_responses[i] = "N/A"
@@ -134,11 +144,14 @@ with open(TRIAL_NAME + "_RESULTS.csv", 'w') as reac_file:
     writer.writerow(['Hour', 'Minute', 'Correct answer', 'User Response',
                      'Accuracy (T/F)', 'Reaction time (s)', 'Reaction on time (T/F)', 'Clip Index', ' ', ' ',
                      'Responses time from start'])
-    for i in range(NUM_TESTS):
+    num_rows_in_table = max([len(response_timing_markers), len(correct_answers)])
+    for i in range(num_rows_in_table):
         if i >= len(response_timing_markers):
             writer.writerow([hour_array[i], minute_array[i], correct_answers[i],
                              user_responses[i], accuracy_array[i], reaction_times[i],
                              reaction_on_time[i], clip_index_array[i], ' ', ' ', -1])
+        elif i >= len(correct_answers):
+            writer.writerow([-1, -1, -1, -1, -1, -1, -1, -1, ' ', ' ', response_timing_markers[i]])
         else:
             writer.writerow([hour_array[i], minute_array[i], correct_answers[i],
                              user_responses[i], accuracy_array[i], reaction_times[i],
