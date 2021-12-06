@@ -49,6 +49,7 @@ if __name__ == "__main__":
     stimuli_time_stamps = np.array(data[:, 3], dtype=float)
     NUM_TESTS = stimuli_time_stamps.size
 
+    print("Interpreting data (may take a while)...")
     # Open .wav with pydub
     audio_segment = AudioSegment.from_wav(TRIAL_NAME + ".wav")
     rec_seconds = audio_segment.duration_seconds
@@ -109,7 +110,7 @@ if __name__ == "__main__":
     for i in range(NUM_TESTS):
         # If there is no response after a time stamp, clearly the user failed to respond...
         rt = float('nan')
-        clip_index_array[i] = -1
+        clip_index_array[i] = -9999
         if stimuli_time_stamps[i] > response_timing_markers[-1]:
             response_accuracies.append("N/A")
             raw_responses.append("N/A")
@@ -169,11 +170,14 @@ if __name__ == "__main__":
         writer = csv.writer(reac_file, delimiter=',', quotechar='"', quoting=csv.QUOTE_MINIMAL)
         writer.writerow(['Hour', 'Minute', 'Correct answer', 'User Response',
                          'Accuracy (T/F)', 'Reaction time (s)', 'Reaction on time (T/F)', 'Clip Index', ' ', ' ', 'Responses time from start'])
-        for i in range(NUM_TESTS):
+        num_rows_in_table = max([len(response_timing_markers), len(correct_answers)])
+        for i in range(num_rows_in_table):
             if i >= len(response_timing_markers):
                 writer.writerow([hour_array[i], minute_array[i], correct_answers[i],
                                  raw_responses[i], response_accuracies[i], reaction_times[i],
                                  reaction_on_time[i], clip_index_array[i], ' ', ' ', -1])
+            elif i >= len(correct_answers):
+                writer.writerow([-1, -1, -1, -1, -1, -1, -1, -1, ' ', ' ', response_timing_markers[i]])
             else:
                 writer.writerow([hour_array[i], minute_array[i], correct_answers[i],
                                  raw_responses[i], response_accuracies[i], reaction_times[i],
