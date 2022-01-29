@@ -12,8 +12,6 @@ import pyttsx3
 TRIAL_NAME = "clock_test1"
 # Name of the test sequence file
 TEST_QUESTION_FILENAME = "clock_versionA.mat"
-# Pause time in seconds
-PAUSE_TIME_S = 1.6
 # Number of tests
 # NUM_TESTS = 90
 NUM_TESTS = 10
