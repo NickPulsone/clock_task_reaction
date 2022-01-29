@@ -11,8 +11,6 @@ from math import isnan
 # Trial name (subject name, etc)
 TRIAL_NAME = "clock_test1"
 CSV_FILENAME = TRIAL_NAME + ".csv"
-# Pause time in seconds
-PAUSE_TIME_S = 1.6
 # Number of tests
 # NUM_TESTS = 90
 NUM_TESTS = 10
