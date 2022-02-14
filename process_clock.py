@@ -20,7 +20,7 @@ SILENCE_THRESHOLD_DB = -20.0
 MIN_PERIOD_SILENCE_MS = 500
 # Delay after the minute (not exact due to inconsistent timing when playing sound in python)
 AFTER_HOUR_DELAY = 0.1
-AFTER_MIN_DELAY = 0.9
+AFTER_MIN_DELAY = 1.0
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 
 
