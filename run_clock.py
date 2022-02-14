@@ -17,7 +17,7 @@ TEST_QUESTION_FILENAME = "clock_versionA.mat"
 NUM_TESTS = 10
 # Delay after the minute (not exact due to inconsistent timing when playing sound in python)
 AFTER_HOUR_DELAY = 0.1
-AFTER_MIN_DELAY = 0.9
+AFTER_MIN_DELAY = 1.0
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 
 if __name__ == "__main__":
