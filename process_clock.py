@@ -13,14 +13,14 @@ TRIAL_NAME = "clock_test1"
 CSV_FILENAME = TRIAL_NAME + ".csv"
 # Number of tests
 # NUM_TESTS = 90
-NUM_TESTS = 10
+NUM_TESTS = 30
 # The highest audio level (in dB) the program will determine to be considered "silence"
 SILENCE_THRESHOLD_DB = -20.0
 # The minimum period, in milliseconds, that could distinguish two different responses
 MIN_PERIOD_SILENCE_MS = 500
 # Delay after the minute (not exact due to inconsistent timing when playing sound in python)
-AFTER_HOUR_DELAY = 0.1
-AFTER_MIN_DELAY = 1.0
+#AFTER_HOUR_DELAY = 0.1
+AFTER_MIN_DELAY = 4.0
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 
 
@@ -60,6 +60,8 @@ if __name__ == "__main__":
         silence.detect_nonsilent(normalized_sound, min_silence_len=MIN_PERIOD_SILENCE_MS,
                                  silence_thresh=SILENCE_THRESHOLD_DB,
                                  seek_step=1))
+
+    print(f"RAW: {response_timing_chunks}")
 
     # If unable to detect nonsilence, end program and notify user
     if len(response_timing_chunks) == 0:
@@ -102,6 +104,9 @@ if __name__ == "__main__":
     # Init the speech to text recognizer
     r = sr.Recognizer()
 
+    print(f"Stimuli: {stimuli_time_stamps}")
+    print(f"Responses: {response_timing_markers}")
+
     # Calculate the reponse times given the arrays for response_timing_markers and stimuli_time_stamps
     reaction_times = []
     clip_index_array = np.empty(NUM_TESTS, dtype=int)
@@ -118,15 +123,15 @@ if __name__ == "__main__":
                 if response_timing_markers[j] > stimuli_time_stamps[i]:
                     # If reaction is too fast, it means the program is considering a delayed response from previous stimulus
                     # Thus, we should continue the loop if that is the case, otherwise, break and store the reaction time
-                    if response_timing_markers[j] - stimuli_time_stamps[i] < 0.1 and len(reaction_times) > 0 and \
-                            reaction_times[-1] > AFTER_MIN_DELAY:
+                    if ((response_timing_markers[j] - stimuli_time_stamps[i]) < 0.3) and len(reaction_times) > 0 and \
+                            reaction_times[-1] > (AFTER_MIN_DELAY * 1.75):
                         continue
                     rt = response_timing_markers[j] - stimuli_time_stamps[i]
                     break
             # If there is no nonsilent chunk after the time that the stimulus is displayed, store reaction time as "nan"
             # Also if the user's response is over 1.6s after the stimulus is displayed, then we know they either failed to
             # respond or the audio was not recorded and intepreted properly.
-            if j >= len(response_timing_markers) or (rt > (AFTER_MIN_DELAY * 1.2 + 1.0)):
+            if j >= len(response_timing_markers) or (rt > (AFTER_MIN_DELAY * 1.75)):
                 reaction_times.append(float('nan'))
                 raw_responses.append("N/A")
                 response_accuracies.append("N/A")
@@ -158,7 +163,7 @@ if __name__ == "__main__":
     # Create another array to label each reaction time according to if it was within the allotted time or not
     reaction_on_time = np.empty(NUM_TESTS, dtype=bool)
     for i in range(NUM_TESTS):
-        if reaction_times[i] > AFTER_MIN_DELAY or isnan(reaction_times[i]):
+        if reaction_times[i] > AFTER_MIN_DELAY * 1.75 or isnan(reaction_times[i]):
             reaction_on_time[i] = False
         else:
             reaction_on_time[i] = True
