@@ -14,10 +14,11 @@ TRIAL_NAME = "clock_test1"
 TEST_QUESTION_FILENAME = "clock_versionA.mat"
 # Number of tests
 # NUM_TESTS = 90
-NUM_TESTS = 10
+NUM_TESTS = 30
 # Delay after the minute (not exact due to inconsistent timing when playing sound in python)
-AFTER_HOUR_DELAY = 0.1
-AFTER_MIN_DELAY = 1.0
+AFTER_HOUR_DELAY = 2.0
+AFTER_MIN_DELAY = 4.0
+
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 
 if __name__ == "__main__":
@@ -47,40 +48,42 @@ if __name__ == "__main__":
     print("Starting...")
 
     # Define recording parameters and start recording
-    rec_seconds = int(NUM_TESTS) * 4.5
+    rec_seconds = int(NUM_TESTS) * 7.5 + 10
     rec_sample_rate = 44100
     myrecording = sd.rec(int(rec_seconds * rec_sample_rate), samplerate=rec_sample_rate, channels=1)
     recording_start_time = datetime.datetime.now()
-    sleep(2)
-
+    sleep(3)
     # Run the tests using TTS
     for i in range(NUM_TESTS):
         # Play the hour sound, record time
-        htime = time()
+        now1 = time()
         engine.say(str(hour_array[i]))
         engine.runAndWait()
         engine.stop()
-        # Pause, then play the minute sound
-        while (time() - htime) < AFTER_HOUR_DELAY:
+        # Pause
+        while time()-now1 < AFTER_HOUR_DELAY:
             sleep(0.001)
-        mtime = time()
-        engine.say(str(minute_array[i]))
+        # Play the minute sound
+        now2 = time()
+        print(now2-now1)
         # Record the time to calculate user performance
-        stimuli_time_stamps[i] = datetime.datetime.now()
+        stimuli_time_stamps[i] = datetime.datetime.now() - recording_start_time
+        engine.say(str(minute_array[i]))
         engine.runAndWait()
         engine.stop()
         # Pause
-        sleep(AFTER_MIN_DELAY)
+        while time() - now2 < AFTER_MIN_DELAY:
+            sleep(0.001)
 
     # Stop the recording, save file as .wav
     print("Waiting for recording to stop...")
     sd.wait()
     wavfile.write(TRIAL_NAME + '.wav', rec_sample_rate, myrecording)
-    print("Done.")
+    print("Done. Saving data...")
 
     # Calculate the time of each stimulus with respect to the start of the recording
     stimuli_time_stamps = np.array(
-        [(stimuli_time_stamps[i] - recording_start_time).total_seconds() for i in range(NUM_TESTS)])
+        [(stimuli_time_stamps[i]).total_seconds() for i in range(NUM_TESTS)])
 
     # Write results to file
     with open(TRIAL_NAME + ".csv", 'w') as reac_file:
