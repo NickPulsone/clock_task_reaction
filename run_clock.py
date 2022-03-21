@@ -48,7 +48,7 @@ if __name__ == "__main__":
     print("Starting...")
 
     # Define recording parameters and start recording
-    rec_seconds = int(NUM_TESTS) * 7.5 + 10
+    rec_seconds = int(NUM_TESTS) * 7.2
     rec_sample_rate = 44100
     myrecording = sd.rec(int(rec_seconds * rec_sample_rate), samplerate=rec_sample_rate, channels=1)
     recording_start_time = datetime.datetime.now()
