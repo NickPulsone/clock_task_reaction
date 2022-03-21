@@ -65,7 +65,6 @@ if __name__ == "__main__":
             sleep(0.001)
         # Play the minute sound
         now2 = time()
-        print(now2-now1)
         # Record the time to calculate user performance
         stimuli_time_stamps[i] = datetime.datetime.now() - recording_start_time
         engine.say(str(minute_array[i]))
