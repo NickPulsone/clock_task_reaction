@@ -20,7 +20,7 @@ SILENCE_THRESHOLD_DB = -20.0
 MIN_PERIOD_SILENCE_MS = 500
 # Delay after the minute (not exact due to inconsistent timing when playing sound in python)
 #AFTER_HOUR_DELAY = 0.1
-AFTER_MIN_DELAY = 4.0
+AFTER_MIN_DELAY = 2.0
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 
 
@@ -60,8 +60,6 @@ if __name__ == "__main__":
         silence.detect_nonsilent(normalized_sound, min_silence_len=MIN_PERIOD_SILENCE_MS,
                                  silence_thresh=SILENCE_THRESHOLD_DB,
                                  seek_step=1))
-
-    print(f"RAW: {response_timing_chunks}")
 
     # If unable to detect nonsilence, end program and notify user
     if len(response_timing_chunks) == 0:
@@ -103,9 +101,6 @@ if __name__ == "__main__":
 
     # Init the speech to text recognizer
     r = sr.Recognizer()
-
-    print(f"Stimuli: {stimuli_time_stamps}")
-    print(f"Responses: {response_timing_markers}")
 
     # Calculate the reponse times given the arrays for response_timing_markers and stimuli_time_stamps
     reaction_times = []
