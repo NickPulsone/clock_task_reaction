@@ -5,17 +5,16 @@ from time import sleep, time
 import sounddevice as sd
 import datetime
 import csv
-import pyttsx3
 import pyaudio
 
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  TUNABLE PARAMETERS    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 # Trial name (subject name, etc)
-TRIAL_NAME = "clock_test1"
+TRIAL_NAME = "clock_test_419_1"
 # Name of the test sequence file
 TEST_QUESTION_FILENAME = "clock_versionA.mat"
 # Number of tests
 # NUM_TESTS = 90
-NUM_TESTS = 30
+NUM_TESTS = 20
 # Delay after the minute (not exact due to inconsistent timing when playing sound in python)
 AFTER_HOUR_DELAY = 1.0
 AFTER_MIN_DELAY = 2.0
@@ -55,7 +54,6 @@ if __name__ == "__main__":
     myrecording = sd.rec(int(rec_seconds * rec_sample_rate), samplerate=rec_sample_rate, channels=1)
     recording_start_time = datetime.datetime.now()
     sleep(2)
-
     # Open a data stream to play audio
     p = pyaudio.PyAudio()
     hour_fs = Number60["Fs" + str(hour_array[0])][0][0]
@@ -63,18 +61,20 @@ if __name__ == "__main__":
     stream = p.open(format=pyaudio.paFloat32, channels=1, rate=hour_fs, output=True)
     # Run the tests based on loaded sound data
     for i in range(NUM_TESTS):
+        # Display stimulus to screen
+        print(f"Stimulus {i+1}: \"{hour_array[i]}:{minute_array[i]}\"")
         # Play the hour sound, record time
         hour_sound = (Number60["y" + str(hour_array[i])])[:, 0]
         stream.write(hour_sound.astype(np.float32).tobytes())
         htime = time()
-        # Pause, then play the minute sound
+        # Pause, record time, then play the minute sound
         minute_sound = Number60["y" + str(minute_array[i])]
         while (time() - htime) < AFTER_HOUR_DELAY:
             sleep(0.01)
-        stream.write(minute_sound.astype(np.float32).tobytes())
-        mtime = time()
-        # Record time to calculate user performance, pause
         stimuli_time_stamps[i] = datetime.datetime.now()
+        stream.write(minute_sound.astype(np.float32).tobytes())
+        # Pause again between stimuli
+        mtime = time()
         while (time() - mtime) < AFTER_MIN_DELAY:
             sleep(0.01)
     # Close audio data stream
@@ -100,3 +100,4 @@ if __name__ == "__main__":
             writer.writerow([hour_array[i], minute_array[i], answer_array[i][0],
                              stimuli_time_stamps[i]])
     print("Done")
+    
