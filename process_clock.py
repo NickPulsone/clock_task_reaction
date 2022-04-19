@@ -9,15 +9,15 @@ from math import isnan
 
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  TUNABLE PARAMETERS    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 # Trial name (subject name, etc)
-TRIAL_NAME = "clock_test1"
+TRIAL_NAME = "clock_test_419_1"
 CSV_FILENAME = TRIAL_NAME + ".csv"
 # Number of tests
 # NUM_TESTS = 90
-NUM_TESTS = 30
+NUM_TESTS = 20
 # The highest audio level (in dB) the program will determine to be considered "silence"
 SILENCE_THRESHOLD_DB = -20.0
 # The minimum period, in milliseconds, that could distinguish two different responses
-MIN_PERIOD_SILENCE_MS = 500
+MIN_PERIOD_SILENCE_MS = 250
 # Delay after the minute (not exact due to inconsistent timing when playing sound in python)
 #AFTER_HOUR_DELAY = 0.1
 AFTER_MIN_DELAY = 2.0
