@@ -1,0 +1,27 @@
+To run simon task:
+1) Open the visual simon task folder.
+2) There are 4 different simontask files that end in ".py" corresponding to the 
+   different tasks that can be performed. Locate the one of your choosing.
+3) Right click the file, hover over "Edit with IDLE" then click "Edit with IDLE 3.10"
+4) Follow the instructions in the file to run the program, change any parameters as necessary.
+
+To run any other cognitive task: 
+1) Open the folder of the desired task 
+2) Locate the "run_<task>.py" python file within the folder.
+3) Right click the file, hover over "Edit with IDLE" then click "Edit with IDLE 3.10."
+4) Edit the necessary parameters at the top of the file (trial name, delay times, number of stimuli, etc)
+5) Ensure a microphone is connected if you are performing an auditory task.
+6) Towards the top you will see a drop down called "Run." Hover over that and click "Run module"
+7) The cognitive task will now run.
+
+To process any cognitive task that has already run:
+1) Open the folder of the desired task.
+2) Locate the "process_<task>.py" python file within the folder.
+3) Right click the file, hover over "Edit with IDLE" then click "Edit with IDLE 3.10."
+2) Ensure "<your trial name>.csv" and "<your trial name>.wav" are contained in the folder.
+   (This will happen automatically if you run the task with the current laptop setup).
+3) IMPORTANT: Make sure the TRIAL NAME, NUMBER OF STIMULI, and DELAY times all match the parameters 
+   entered when the task was performed.
+5) Towards the top you will see a drop down called "Run." Hover over that and click "Run module"
+6) The cognitive task will now process the data. This can take up to 2-3 minutes depending on the
+   length of the task.
