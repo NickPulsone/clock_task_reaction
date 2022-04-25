@@ -9,7 +9,7 @@ import pyaudio
 
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  TUNABLE PARAMETERS    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 # Trial name (subject name, etc)
-TRIAL_NAME = "clock_test_419_1"
+TRIAL_NAME = "clock_test"
 # Name of the test sequence file
 TEST_QUESTION_FILENAME = "clock_versionA.mat"
 # Number of tests
@@ -62,7 +62,7 @@ if __name__ == "__main__":
     # Run the tests based on loaded sound data
     for i in range(NUM_TESTS):
         # Display stimulus to screen
-        print(f"Stimulus {i+1}: \"{hour_array[i]}:{minute_array[i]}\"")
+        print(f"Stimulus {i + 1}: \"{hour_array[i]}:{minute_array[i]},\" Correct Answer: {answer_array[i]}")
         # Play the hour sound, record time
         hour_sound = (Number60["y" + str(hour_array[i])])[:, 0]
         stream.write(hour_sound.astype(np.float32).tobytes())
@@ -100,4 +100,3 @@ if __name__ == "__main__":
             writer.writerow([hour_array[i], minute_array[i], answer_array[i][0],
                              stimuli_time_stamps[i]])
     print("Done")
-    
