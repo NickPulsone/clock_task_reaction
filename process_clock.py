@@ -9,7 +9,7 @@ from math import isnan
 
 """ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  TUNABLE PARAMETERS    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ """
 # Trial name (subject name, etc)
-TRIAL_NAME = "clock_test_419_1"
+TRIAL_NAME = "clock_test"
 CSV_FILENAME = TRIAL_NAME + ".csv"
 # Number of tests
 # NUM_TESTS = 90
