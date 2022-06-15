@@ -45,7 +45,7 @@ if __name__ == "__main__":
     minute_array = np.array(data[:, 1], dtype=int)
     correct_answers = np.array(data[:, 2], dtype=str)
     stimuli_time_stamps = np.array(data[:, 3], dtype=float)
-    NUM_TESTS = stimuli_time_stamps.size
+    #NUM_TESTS = stimuli_time_stamps.size
 
     print("Interpreting data (may take a while)...")
     # Open .wav with pydub
