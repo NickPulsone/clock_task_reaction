@@ -174,6 +174,7 @@ if __name__ == "__main__":
                 writer.writerow([hour_array[i], minute_array[i], correct_answers[i],
                                  raw_responses[i], response_accuracies[i], reaction_times[i],
                                  reaction_on_time[i], clip_index_array[i], ' ', ' ', -1])
+            # Make sure all fields are filled out (-1 if invalid) in cases where there are more responses than stimuli or vice versa
             elif i >= len(correct_answers):
                 writer.writerow([-1, -1, -1, -1, -1, -1, -1, -1, ' ', ' ', response_timing_markers[i]])
             else:
